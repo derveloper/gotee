@@ -21,13 +21,11 @@ func main() {
 
 	info, err := os.Stat(configFile)
 	if !os.IsNotExist(err) && !info.IsDir() {
-		log.Printf("reading config from %s\n", configFile)
 		err = cleanenv.ReadConfig(configFile, &cfg)
 		if err != nil {
 			log.Println(err)
 		}
 	} else {
-		log.Printf("reading config from environment\n")
 		err = cleanenv.ReadEnv(&cfg)
 		if err != nil {
 			log.Println(err)
