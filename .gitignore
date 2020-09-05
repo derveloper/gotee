@@ -67,6 +67,7 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+.idea/
 
 # Binaries for programs and plugins
 *.exe
