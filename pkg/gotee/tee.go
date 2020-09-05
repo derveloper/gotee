@@ -2,6 +2,7 @@ package gotee
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"time"
 )
@@ -39,6 +40,9 @@ func Tee(lineFunc func([]string), flushInterval time.Duration) {
 func flush(lines []string, lineFunc func([]string)) []string {
 	if len(lines) != 0 {
 		lineFunc(lines)
+		for _, line := range lines {
+			fmt.Println(line)
+		}
 		lines = make([]string, 0)
 	}
 	return lines

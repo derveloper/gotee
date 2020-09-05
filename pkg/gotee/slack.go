@@ -3,15 +3,12 @@ package gotee
 import (
 	"github.com/slack-go/slack"
 	"log"
-	"os"
 	"strings"
 )
 
 func SlackOutput(token string, channel string) func(lines []string) {
 	api := slack.New(
 		token,
-		slack.OptionDebug(true),
-		slack.OptionLog(log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)),
 	)
 	var timestamp string
 	lines := make([]string, 0)
@@ -22,8 +19,6 @@ func SlackOutput(token string, channel string) func(lines []string) {
 			_, _, _, err := api.UpdateMessage(channel, timestamp, slack.MsgOptionText(msg, false))
 			if err != nil {
 				log.Println(err)
-			} else {
-				log.Println("updated message")
 			}
 		} else {
 			_, ts, _, err := api.SendMessage(channel,
@@ -33,7 +28,6 @@ func SlackOutput(token string, channel string) func(lines []string) {
 				log.Println(err)
 			}
 			timestamp = ts
-			log.Printf("posted new message %s\n", timestamp)
 		}
 	}
 	return lineFunc
