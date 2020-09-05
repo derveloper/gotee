@@ -1,0 +1,64 @@
+= gotee
+
+like unix `tee` but for slack
+
+== example
+
+=== simple
+
+Pipe `STDOUT` to slack
+
+[source,bash]
+----
+echo "test" | gotee
+----
+
+Stream `STDOUT` to slack, appends new lines to message every 5 seconds
+
+[source,bash]
+----
+while true; do echo test; sleep 1; done | gotee
+----
+
+=== systemd failure notifications
+
+Create a gotee systemd unit file
+
+[source,bash]
+----
+systemctl edit --full --force gotee@.service
+----
+
+Content of the gotee unit file
+
+[source,ini]
+----
+[Unit]
+Description=Send slack notification
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -c '/usr/bin/systemctl status %i | /usr/local/bin/gotee'
+----
+
+
+Finally, add gotee to your existing unit file
+
+[source,ini]
+----
+[Unit]
+...
+OnFailure=gotee@%n
+----
+
+== configuration
+
+either use the environment variables `GOTEE_SLACK_TOKEN` and `GOTEE_SLACK_CHANNEL`
+or place a config file in `/etc/gotee/config.yml`
+
+[source,yaml]
+----
+slack_token: "<YOUR API TOKEN>"
+slack_channel: "C00000000"
+----
+
