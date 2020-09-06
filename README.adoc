@@ -41,7 +41,7 @@ Type=oneshot
 ExecStart=/usr/bin/bash -c '/usr/bin/systemctl status %i | /usr/local/bin/gotee'
 ----
 
-==== Finally, add gotee to your existing unit file
+==== Finally, add gotee as OnFailure unit
 
 [source,ini]
 ----
@@ -49,6 +49,10 @@ ExecStart=/usr/bin/bash -c '/usr/bin/systemctl status %i | /usr/local/bin/gotee'
 ...
 OnFailure=gotee@%n
 ----
+
+===== Notifications for all units
+
+You can place a top-level (global) `OnFailure` in `/etc/systemd/system/service.d/10-notify-failed.conf`
 
 == configuration
 
