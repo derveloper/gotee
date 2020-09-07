@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
+	flag "github.com/spf13/pflag"
 )
 
 type ConfigGoTee struct {
@@ -16,7 +17,6 @@ type ConfigGoTee struct {
 
 func main() {
 	var cfg ConfigGoTee
-
 	configFile := "/etc/gotee/config.yml"
 
 	info, err := os.Stat(configFile)
@@ -30,6 +30,15 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
+	}
+
+	flag.StringVarP(&cfg.Channel, "channel", "c", cfg.Channel, "set the channel to post to")
+	showHelp := flag.BoolP("help", "h", false, "print this help")
+	flag.Parse()
+
+	if *showHelp {
+		flag.Usage()
+		os.Exit(0)
 	}
 
 	lineFunc := gotee.SlackOutput(cfg.Token, cfg.Channel)
